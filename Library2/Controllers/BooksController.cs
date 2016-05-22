@@ -108,7 +108,7 @@ namespace Library2.Controllers
                 if (MyDb.BookTake(id))
                 {
                     tookstr = "Congratulations! You have taken a book \"" + MyDb.MyBooks.Find(p => p.ID == id).Name + "\"";
-                    await AsyncSendMessage("Поздравляем, вы взяли книгу \"" + MyDb.MyBooks.Find(p => p.ID == id).Name + "\"");
+                    await AsyncSendMessage("Поздравляем, вы взяли книгу \"" + MyDb.MyBooks.Find(p => p.ID == id).Name + "\" автора "+MyDb.MyBooks.Find(p=> p.ID==id).Author);
                 }
                 else
                     tookstr = "We`re sorry, but this book is no available at the moment.";
@@ -147,8 +147,8 @@ namespace Library2.Controllers
             MailAddress to = new MailAddress(UserBase.CurrentUser.Email);
             MailMessage m = new MailMessage(from, to);
             m.Subject = "Notification";
-            m.Body = text ;
-           // m.IsBodyHtml = true;
+            m.Body = "<h2>" + text + "</h2>";
+            m.IsBodyHtml = true;
             SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
             smtp.Credentials = new NetworkCredential(" rassylocnyjbot@gmail.com", "12365478");
             smtp.EnableSsl = true;

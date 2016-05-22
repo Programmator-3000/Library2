@@ -14,22 +14,12 @@ namespace Library2.Controllers
         public ActionResult Index()
         {
             ViewBag.Message = "Online-library by Denizzz";
-            //Library2.Models.UserBase.CurrentUser = UserBase.Users.Find(d => d.Email == "hfsx@ukr.net");
-           // Library2.Models.UserBase.CurrentUser = UserBase.Users.Find(d => d.Email == "denizz@ukr.net");
             return View();
         }
 
-        public ActionResult About()
+
+        public ActionResult UserGuide()
         {
-            ViewBag.Message = "Your app description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
             return View();
         }
     }

@@ -11,8 +11,6 @@ namespace Library2.Controllers
 {
     public class BooksController : Controller
     {
-        //
-        // GET: /Books/
 
         public dbBooks MyDb = new dbBooks();
         static bool? TakenF = null;

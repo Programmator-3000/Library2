@@ -1,0 +1,17 @@
+﻿@if (Library2.Models.UserBase.CurrentUser != null)
+{
+    <text>
+        Greetings, @Html.ActionLink(@Library2.Models.UserBase.CurrentUser.Email, "History", "Account", routeValues: null, htmlAttributes: new { @class = "username", title = "Управление" })!
+        @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" })) {
+       @Html.AntiForgeryToken()
+             @Html.ActionLink("Log off", "LogOff", "Account")
+          //  <a href="javascript:document.getElementById('logoutForm').submit()">Выйти</a>
+            
+        }
+    </text>
+} else {
+    <ul>
+        <li>@Html.ActionLink("Registration", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+    </ul>
+}

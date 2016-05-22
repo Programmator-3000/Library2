@@ -1,0 +1,26 @@
+﻿@{
+    ViewBag.Title = "Library";
+}
+@section featured {
+    <section class="featured">
+        <div class="content-wrapper">
+            <hgroup class="title">
+                <h1>@ViewBag.Title.</h1>
+                <h2>@ViewBag.Message</h2>
+            </hgroup>
+
+        </div>
+    </section>
+}
+
+<p>Welcome to our library. </p>
+Please, log in to view our variaty of books, and manage them. If you are not registered yet - click the "Registration" link above.
+
+@*@try{
+@Library2.Models.UserBase.CurrentUser.Email
+}
+catch
+{
+@:Nobudy autorizated
+}*@
+

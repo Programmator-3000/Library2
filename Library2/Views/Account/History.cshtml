@@ -1,0 +1,21 @@
+﻿@model IEnumerable<Library2.Models.Record>
+
+@{
+    ViewBag.Title = "History";
+    WebGrid grid = new WebGrid(Model);
+}
+
+<h2>History</h2>
+
+@if(ViewBag.Count!=0)
+{
+
+@grid.GetHtml(columns: new[]{
+    grid.Column("Book"),
+    grid.Column("Date"),
+            });
+}
+else
+{
+ @:You have never taken any book at our library.    
+}

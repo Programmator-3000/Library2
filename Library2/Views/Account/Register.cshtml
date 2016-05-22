@@ -1,0 +1,38 @@
+﻿@model Library2.Models.User
+@{
+    ViewBag.Title = "Registration";
+}
+
+<hgroup class="title">
+    <h1>@ViewBag.Title.</h1>
+    <h2>Creating new account</h2>
+</hgroup>
+@ViewBag.ExistsError
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+
+    <fieldset>
+        <legend>Форма регистрации</legend>
+        <ol>
+            <li>
+                @Html.LabelFor(m => m.Email)
+                @Html.TextBoxFor(m => m.Email)
+            </li>
+
+@*            @if(Library2.Models.UserBase.CurrentUser!=null)
+            {
+                if(Library2.Models.UserBase.CurrentUser.IsAdmin)
+                {
+                    @Html.CheckBoxFor(m => m.IsAdmin)
+                    @Html.LabelFor(m => m.IsAdmin, new { @class = "checkbox" })
+                }
+            }*@
+        </ol>
+        <input type="submit" value="Registrate" />
+    </fieldset>
+}
+
+@*@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}*@

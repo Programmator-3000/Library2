@@ -1,0 +1,73 @@
+﻿@model  IEnumerable<Library2.Models.Book>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    WebGrid grid = new WebGrid(Model);
+}
+
+@if(Library2.Models.UserBase.CurrentUser!=null)
+{
+    if(Library2.Models.UserBase.CurrentUser.IsAdmin)
+    {
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+}
+}
+
+<h2>Index</h2>    
+
+
+
+<p>@ViewBag.TookMessage</p>
+@if(Library2.Models.UserBase.CurrentUser!=null)
+{
+    if(ViewBag.ShowAll)
+{
+    <b>@Html.ActionLink("Show All", "Index", new { flag=true })</b>
+    @Html.ActionLink("Ahow Available", "Index", new { flag=false })
+}
+else
+{
+    @Html.ActionLink("Show All", "Index", new { flag=true })
+    <b>@Html.ActionLink("Ahow Available", "Index", new { flag=false })</b>
+}
+    
+    if(Library2.Models.UserBase.CurrentUser.IsAdmin)
+    {
+    @grid.GetHtml(columns: new[]{
+    grid.Column("ID","ID"),
+    grid.Column("Name","Name"),
+    grid.Column("Quantity","Quantity"),
+    grid.Column("Author", " Author"),
+    grid.Column("",
+    header:"Actions",
+    format: @<text>
+                @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
+                @Html.ActionLink("Show Tracking", "History", new { id=item.ID}) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+            </text>
+               )
+            });
+    }else
+    {
+     @grid.GetHtml(columns: new[]{
+     grid.Column("ID", "ID"),
+     grid.Column("Name", "Name"),
+     grid.Column("Quantity","Quantity  "),
+     grid.Column("Author","Author"),
+     grid.Column("",
+    header:"Actions",
+    format: @<text>
+                @Html.ActionLink("Take a book", "TakeBook", new { id=item.ID}) |
+                @Html.ActionLink("Show Tracking", "History", new { id=item.ID})
+            </text>
+               )
+            });
+    }
+}
+else
+{
+ @:You must autorize to use the library!  
+}

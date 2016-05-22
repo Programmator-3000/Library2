@@ -1,0 +1,10 @@
+Due to capabilities, provided by GitHub, installation of this project can be executed in a few clicks. So, basicly, there is nothing to explain here.
+I suppose, you need to know, what software and frameworks I`ve used during implementstion.
+This project is a ASP.NET MVC 4 web-application, implemented by Visual Studio 2012. DataBase is created by MSSQL Server.
+
+There are three types of users provided if this project:
+1. Unregistered user, who doesn`t have actual access to the Library.
+2. Regular reader, who has an opportunity to view books and take them.
+3. Administrator, who can manage books any way he wants it.
+
+List of exact user-accounts, I`ve created for testing, you can find on UserGuide page of the project.

@@ -21,6 +21,9 @@ namespace Library2.Models
             FetchUsers();
         }
 
+        /// <summary>
+        /// Fetches Users records from the database
+        /// </summary>
         public static void FetchUsers()
         {
             Users.Clear();
@@ -45,6 +48,11 @@ namespace Library2.Models
             }
         }
 
+        /// <summary>
+        /// Checkes if user is registered in the base
+        /// </summary>
+        /// <param name="u"></param>
+        /// <returns></returns>
         public static bool IsRegistered(ref User u)
         {
             FetchUsers();
@@ -61,7 +69,11 @@ namespace Library2.Models
             }
         }
 
-
+        /// <summary>
+        /// Adds a new user to the base
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="isAdmin"></param>
         public static void UserAdd(string email, bool isAdmin = false)
         {
             using (SqlConnection con = new SqlConnection(strConnection))

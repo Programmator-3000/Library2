@@ -13,18 +13,12 @@ namespace Library2.Controllers
     {
 
         public dbBooks MyDb = new dbBooks();
-        static bool? TakenF = null;
-        static int takenid;
+        static string tookstr;
 
         public ActionResult Index(bool flag = true)
         {
-            switch (TakenF)
-            {
-                case true: { ViewBag.TookMessage = "Congratulations! You have taken a book \"" + MyDb.MyBooks.Find(p => p.ID == takenid).Name + "\""; break; }
-                case false: {ViewBag.TookMessage = "We`re sorry, but this book is no available at the moment."; break;}
-                default: { ViewBag.TookMessage = ""; break; }
-            }
-            TakenF = null; 
+            ViewBag.TookMessage = tookstr;
+            tookstr = null;
             ViewBag.ShowAll = true;
             if (flag)
             {
@@ -108,14 +102,20 @@ namespace Library2.Controllers
 
         public ActionResult TakeBook(int id = 0)
         {
-            if (MyDb.BookTake(id))
+            try
             {
-                TakenF = true;
-                takenid = id;
-                SendMessage("Поздравляем, вы взяли книгу \"" + MyDb.MyBooks.Find(p => p.ID == id).Name + "\"");
+                if (MyDb.BookTake(id))
+                {
+                    tookstr = "Congratulations! You have taken a book \"" + MyDb.MyBooks.Find(p => p.ID == id).Name + "\"";
+                    SendMessage("Поздравляем, вы взяли книгу \"" + MyDb.MyBooks.Find(p => p.ID == id).Name + "\"");
+                }
+                else
+                    tookstr = "We`re sorry, but this book is no available at the moment.";
             }
-            else
-                TakenF = false;
+            catch (Exception e)
+            {
+                tookstr = "We`re sorry, en error has occured while sending your email notofication! Maybe you should check you internet connection.";
+            }
             return RedirectToAction("Index");
         }
 

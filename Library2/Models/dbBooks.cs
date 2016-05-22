@@ -12,36 +12,19 @@ namespace Library2.Models
     {
         string strConnection = ConfigurationManager.ConnectionStrings["LibraryDb"].ConnectionString.ToString();
 
-        public bool ShowAll = false;
-        public bool ShowAvailable = false;
-
-        public int MaxBookID = 0;
-        public int MaxRecID = 0;
-        public int MaxUserID = 0;
-        public int MaxFicBookID = 0;
-        public int MaxAuthorID = 0;
-
+        
         public List<Book> MyBooks = new List<Book>();
         public List<Record> MyRecords = new List<Record>();
-        public List<User> MyUsers = new List<User>();
 
         public dbBooks()
         {
-            /*   MaxBookID = GetMaxID("Books");
-               MaxRecID = GetMaxID("Records");
-               MaxUserID = GetMaxID("Users");
-               MaxFicBookID = GetMaxID("FicBooks");
-               MaxAuthorID = GetMaxID("Authors");*/
             FetchBooks();
             FetchUserRecords();
-           // Book b = new Book { Quantity = 23, Name = "Fucking shoes", Author = "Александр Рудазов, Стивен Кинг" };
-            //MAddBook(b);
-           // FetchBooks();
-
-            
         }
 
-
+        /// <summary>
+        /// Method for correct display
+        /// </summary>
         public void MergeAuthors()
         {
             List<int> nums = GetMultipleAuthors();
@@ -51,6 +34,9 @@ namespace Library2.Models
             }
         }
 
+        /// <summary>
+        /// Suppurt method for correct display
+        /// </summary>
         public void Merge(int i)
         {
             string aus = "";
@@ -71,6 +57,10 @@ namespace Library2.Models
             MyBooks.Add(btmp);
         }
 
+        /// <summary>
+        /// Returns list of books IDs with multiple authors
+        /// </summary>
+        /// <returns></returns>
         public List<int> GetMultipleAuthors()
         {
             List<int> res = new List<int>();
@@ -85,8 +75,9 @@ namespace Library2.Models
             return res;
         }
 
-
-
+        /// <summary>
+        /// Fetches books records from the base
+        /// </summary>
         public void FetchBooks()
         {
             MyBooks.Clear();
@@ -108,10 +99,12 @@ namespace Library2.Models
                     }
                 }
             }
-            MaxBookID = MyBooks[MyBooks.Count - 1].ID;
             MergeAuthors();
         }
 
+        /// <summary>
+        /// Fetches Records records from the base
+        /// </summary>
         public void FetchUserRecords()
         {
             MyRecords.Clear();
@@ -134,32 +127,11 @@ namespace Library2.Models
             }
         }
 
-        public void FetchUsers()
-        {
-            using (SqlConnection con = new SqlConnection(strConnection))
-            {
-                string sql = "Select * from Users";
-                SqlCommand cmd = new SqlCommand(sql, con);
-                con.Open();
-                cmd.ExecuteNonQuery();
-
-
-                SqlDataReader dr;
-                dr = cmd.ExecuteReader();
-                if (dr.HasRows)
-                {
-                    while (dr.Read())
-                    {
-                        MyUsers.Add(new User { ID = Convert.ToInt32(dr[0]), Email = dr[1].ToString(), IsAdmin = (bool)dr[2] });
-                    }
-                }
-
-            }
-            MaxUserID = MyUsers[MyUsers.Count - 1].ID;
-        }
-
-
-
+        /// <summary>
+        /// Returns Max ID of the rerords from the table.
+        /// </summary>
+        /// <param name="table">Table name</param>
+        /// <returns>ID</returns>
         public int GetMaxID(string table)
         {
             int? res;
@@ -181,6 +153,11 @@ namespace Library2.Models
                 return Convert.ToInt32(res);
         }
 
+        /// <summary>
+        /// Returns ID of an author.
+        /// </summary>
+        /// <param name="name">Name of authir</param>
+        /// <returns>ID</returns>
         public int? GetAuthorID(string name)
         {
             using (SqlConnection con = new SqlConnection(strConnection))
@@ -205,8 +182,11 @@ namespace Library2.Models
             return null;
         }
 
-
-
+        /// <summary>
+        /// Adds a book in the table of database (support)
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="quantity"></param>
         public void BookAdd(string name, int quantity)
         {
             using (SqlConnection con = new SqlConnection(strConnection))
@@ -216,9 +196,12 @@ namespace Library2.Models
                 con.Open();
                 cmd.ExecuteNonQuery();
             }
-            MaxBookID++;
         }
 
+        /// <summary>
+        /// Deletes a book from database (support)
+        /// </summary>
+        /// <param name="id"></param>
         public void BookDelete(int id)
         {
             using (SqlConnection con = new SqlConnection(strConnection))
@@ -230,6 +213,11 @@ namespace Library2.Models
             }
         }
 
+        /// <summary>
+        /// Changes quantity of the book in the case, someone took it
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public bool BookTake(int id)
         {
             int q = 0;
@@ -251,6 +239,11 @@ namespace Library2.Models
             return true;
         }
 
+        /// <summary>
+        /// Updates information about a book
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="quantity"></param>
         public void BookUpdate(int id, int quantity)
         {
             using (SqlConnection con = new SqlConnection(strConnection))
@@ -264,6 +257,12 @@ namespace Library2.Models
             FetchBooks();
         }
 
+        /// <summary>
+        /// Updates information about a book 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="quantity"></param>
+        /// <param name="name"></param>
         public void BookUpdate(int id, int quantity, string name)
         {
             using (SqlConnection con = new SqlConnection(strConnection))
@@ -277,6 +276,11 @@ namespace Library2.Models
             FetchBooks();
         }
 
+        /// <summary>
+        /// Adds a book to the database (support)
+        /// </summary>
+        /// <param name="bookID"></param>
+        /// <param name="authorID"></param>
         public void FicBookAdd(int bookID, int authorID)
         {
             using (SqlConnection con = new SqlConnection(strConnection))
@@ -286,13 +290,15 @@ namespace Library2.Models
                 con.Open();
                 cmd.ExecuteNonQuery();
             }
-            MaxFicBookID++;
             FetchBooks();
         }
 
+        /// <summary>
+        /// Deletes a book from database by the name (support)
+        /// </summary>
+        /// <param name="bookID"></param>
         public void FicBookDelete(int bookID)
         {
-            //Удаляет по признаку книги.
             using (SqlConnection con = new SqlConnection(strConnection))
             {
                 string sql = "Delete from FicBooks where BookID =" + bookID.ToString();
@@ -303,9 +309,12 @@ namespace Library2.Models
             FetchBooks();
         }
 
+        /// <summary>
+        /// Deletes a book from the library by the ID (support)
+        /// </summary>
+        /// <param name="id"></param>
         public void FicBookIDDelete(int id)
         {
-            //Удаляет по признаку ID
             using (SqlConnection con = new SqlConnection(strConnection))
             {
                 string sql = "Delete from FicBooks where ID =" + id;
@@ -316,6 +325,10 @@ namespace Library2.Models
             FetchBooks();
         }
 
+        /// <summary>
+        /// Adds an author to the database
+        /// </summary>
+        /// <param name="name"></param>
         public void AuthorAdd(string name)
         {
             using (SqlConnection con = new SqlConnection(strConnection))
@@ -325,15 +338,14 @@ namespace Library2.Models
                 con.Open();
                 cmd.ExecuteNonQuery();
             }
-            MaxAuthorID++;
             FetchBooks();
         }
 
-        public void AuthorDelete(int id)
-        {
-            //Let it be empty for now
-        }
-
+        /// <summary>
+        /// Adds a user to the database
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="isAdmin"></param>
         public void UserAdd(string email, bool isAdmin = false)
         {
             using (SqlConnection con = new SqlConnection(strConnection))
@@ -345,6 +357,11 @@ namespace Library2.Models
             }
         }
 
+        /// <summary>
+        /// Adds a record (book tracking) to the database
+        /// </summary>
+        /// <param name="bookID"></param>
+        /// <param name="userID"></param>
         public void RecAdd(int bookID, int userID)
         {
             using (SqlConnection con = new SqlConnection(strConnection))
@@ -354,15 +371,16 @@ namespace Library2.Models
                 con.Open();
                 cmd.ExecuteNonQuery();
             }
-            MaxRecID++;
         }
 
-
+        /// <summary>
+        /// Adds a book to the database (full record)
+        /// </summary>
+        /// <param name="b"></param>
         public void MAddBook(Book b)
         {
             this.BookAdd(b.Name,b.Quantity);
             int? tmp;
-            //tmp = this.GetAuthorID(b.Author)
             foreach (string x in SplitAuthors(b.Author))
             {
                 tmp = GetAuthorID(x);
@@ -381,16 +399,23 @@ namespace Library2.Models
             
         }
 
+        /// <summary>
+        /// Deletes a book from database (full record)
+        /// </summary>
+        /// <param name="bID"></param>
         public void MDelBook(int bID)
         {
             FicBookDelete(bID);
             BookDelete(bID);
         }
 
+        /// <summary>
+        /// Updates book data in the database (full record)
+        /// </summary>
+        /// <param name="b"></param>
         public void MUpdateBook(Book b)
         {
             List<int> tmp = FetchFicBooks(b.ID);
-            //List<string> stmp = SplitAuthors(b.Author);
             List<int> AuthorsID = new List<int>();
 
             foreach (string x in SplitAuthors(b.Author))
@@ -450,6 +475,11 @@ namespace Library2.Models
 
         }
 
+        /// <summary>
+        /// Updates data in the support table of the database
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="aid"></param>
         public void FicBAUpdate(int id, int aid)
         {
               using (SqlConnection con = new SqlConnection(strConnection))
@@ -462,6 +492,11 @@ namespace Library2.Models
             }
         }
 
+        /// <summary>
+        /// Fetches records from the support book table of the database with simillar IDs
+        /// </summary>
+        /// <param name="bID"></param>
+        /// <returns></returns>
         public List<int> FetchFicBooks(int bID)
         {
             List<int> tmp = new List<int>();
@@ -485,8 +520,11 @@ namespace Library2.Models
             return tmp;
         }
 
-
-
+        /// <summary>
+        /// Splits authors line by comas
+        /// </summary>
+        /// <param name="authors"></param>
+        /// <returns></returns>
         public List<string> SplitAuthors(string authors)
         {
             string[] res;

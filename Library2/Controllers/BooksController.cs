@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Library2.Models;
+using System.Threading.Tasks;
 using System.Net.Mail;
 using System.Net;
 
@@ -100,14 +101,14 @@ namespace Library2.Controllers
         }
 
 
-        public ActionResult TakeBook(int id = 0)
+        public async Task<ActionResult> TakeBook(int id = 0)
         {
             try
             {
                 if (MyDb.BookTake(id))
                 {
                     tookstr = "Congratulations! You have taken a book \"" + MyDb.MyBooks.Find(p => p.ID == id).Name + "\"";
-                    SendMessage("Поздравляем, вы взяли книгу \"" + MyDb.MyBooks.Find(p => p.ID == id).Name + "\"");
+                    await AsyncSendMessage("Поздравляем, вы взяли книгу \"" + MyDb.MyBooks.Find(p => p.ID == id).Name + "\"");
                 }
                 else
                     tookstr = "We`re sorry, but this book is no available at the moment.";
@@ -138,6 +139,20 @@ namespace Library2.Controllers
             smtp.Credentials = new NetworkCredential(" rassylocnyjbot@gmail.com", "12365478");
             smtp.EnableSsl = true;
             smtp.Send(m);
+        }
+
+        public static async Task AsyncSendMessage(string text)
+        {
+            MailAddress from = new MailAddress("rassylocnyjbot@gmail.com", "Library");
+            MailAddress to = new MailAddress(UserBase.CurrentUser.Email);
+            MailMessage m = new MailMessage(from, to);
+            m.Subject = "Notification";
+            m.Body = text ;
+           // m.IsBodyHtml = true;
+            SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
+            smtp.Credentials = new NetworkCredential(" rassylocnyjbot@gmail.com", "12365478");
+            smtp.EnableSsl = true;
+            await smtp.SendMailAsync(m);
         }
 
     }

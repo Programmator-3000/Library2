@@ -26,12 +26,12 @@
     if(ViewBag.ShowAll)
 {
     <b>@Html.ActionLink("Show All", "Index", new { flag=true })</b>
-    @Html.ActionLink("Ahow Available", "Index", new { flag=false })
+    @Html.ActionLink("Show Available", "Index", new { flag=false })
 }
 else
 {
     @Html.ActionLink("Show All", "Index", new { flag=true })
-    <b>@Html.ActionLink("Ahow Available", "Index", new { flag=false })</b>
+    <b>@Html.ActionLink("Show Available", "Index", new { flag=false })</b>
 }
     
     if(Library2.Models.UserBase.CurrentUser.IsAdmin)

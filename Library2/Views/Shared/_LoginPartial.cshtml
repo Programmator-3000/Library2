@@ -4,7 +4,7 @@
         Greetings, @Html.ActionLink(@Library2.Models.UserBase.CurrentUser.Email, "History", "Account", routeValues: null, htmlAttributes: new { @class = "username", title = "Управление" })!
         @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" })) {
        @Html.AntiForgeryToken()
-             @Html.ActionLink("Log off", "LogOff", "Account")
+             @Html.ActionLink("Log out", "LogOff", "Account")
           //  <a href="javascript:document.getElementById('logoutForm').submit()">Выйти</a>
             
         }
